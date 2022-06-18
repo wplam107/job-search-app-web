@@ -1,14 +1,14 @@
 import Layout from '../components/layout';
 
-export default function Index() {
+export default function About() {
   return (
     <div>
-      <h1>Hello World</h1>
+      About
     </div>
   );
 };
 
-Index.getLayout = function getLayout(page) {
+About.getLayout = function getLayout(page) {
   return (
     <Layout>
       {page}
