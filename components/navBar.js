@@ -1,28 +1,36 @@
-import Link from 'next/link';
+import ActiveLink from './activeLink';
 
 export default function NavBar() {
   return (
     <nav>
       <ul className="flex space-x-4">
         <li key="home">
-          <Link href="/">
-            <a>Home</a>
-          </Link>
+          <ActiveLink href="/">
+            <span>
+              Home
+            </span>
+          </ActiveLink>
         </li>
         <li key="jobs">
-          <Link href="/jobs">
-            <a>Jobs</a>
-          </Link>
+          <ActiveLink href="/jobs">
+            <span>
+              Jobs
+            </span>
+          </ActiveLink>
         </li>
         <li key="dashboard">
-          <Link href="/dashboard">
-            <a>Dashboard</a>
-          </Link>
+          <ActiveLink href="/dashboard">
+            <span>
+              Dashboard
+            </span>
+          </ActiveLink>
         </li>
         <li key="about">
-          <Link href="/about">
-            <a>About</a>
-          </Link>
+          <ActiveLink href="/about">
+            <span>
+              About
+            </span>
+          </ActiveLink>
         </li>
       </ul>
     </nav>

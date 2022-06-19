@@ -14,7 +14,7 @@ export default function Layout(props) {
         <main className="min-h-screen py-8 flex flex-col justify-center items-center">
           {props.children}
         </main>
-        <footer className="flex flex-1 py-8 border-t border-gray-400 justify-center items-center">
+        <footer className="flex flex-1 py-8 border-t border-zinc-700 justify-center items-center">
           <div>
             Footer
           </div>

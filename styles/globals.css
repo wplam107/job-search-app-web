@@ -4,9 +4,9 @@
 
 @layer base {
   html {
-    @apply bg-black;
+    @apply bg-zinc-900;
   }
   body {
-    @apply text-gray-200;
+    @apply text-gray-300;
   }
 }
