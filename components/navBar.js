@@ -5,7 +5,7 @@ export default function NavBar() {
     <nav>
       <ul className="flex space-x-4">
         <li key="home">
-          <ActiveLink href="/">
+          <ActiveLink href="/" name="home">
             <span>
               Home
             </span>

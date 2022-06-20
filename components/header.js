@@ -2,29 +2,27 @@ import ActiveLink from './activeLink';
 import NavBar from './navBar';
 import { logoPath } from './constants';
 
-export default function Header() {
+export default function Header({ authState }) {
   return (
     <div className="sticky top-0">
       <div className="flex flex-row justify-between px-4 py-4 border-b border-zinc-700">
         <div className="text-indigo-400">
           <span>Job Search App and Dashboard</span>
         </div>
-        <HeaderRight />
+        <HeaderRight authState={authState}/>
       </div>
     </div>
   );
 };
 
-const HeaderRight = () => {
+const HeaderRight = ({ authState }) => {
   return (
     <div className="flex flex-row">
       <div className="pr-2 border-r border-zinc-700">
         <NavBar />
       </div>
       <div className="px-2 border-r border-zinc-700">
-        <ActiveLink href="/signin">
-          <span>Sign In</span>
-        </ActiveLink>
+        {authState === "auth" ? <SignOut /> : <SignIn />}
       </div>
       <div className="pl-2">
         <a href="https://github.com/wplam107/job-search-app-web" target="_blank" referrerPolicy="noreferrer">
@@ -34,5 +32,21 @@ const HeaderRight = () => {
         </a>
       </div>
     </div>
+  );
+};
+
+const SignIn = () => {
+  return (
+    <ActiveLink href="/signin">
+      <span>Sign In/Up</span>
+    </ActiveLink>
+  );
+};
+
+const SignOut = () => {
+  return (
+    <ActiveLink href="/signout">
+      <span>Sign Out</span>
+    </ActiveLink>
   );
 };
