@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { supabase } from '../supabaseClient';
 import Layout from '../components/layout';
 
-export default function SignIn() {
+export default function SignIn({ user }) {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
@@ -27,17 +27,23 @@ export default function SignIn() {
   }
 
   return (
-    <div>
-      <div className="text-lg">
-        Sign In/Up
+    <div className="flex flex-col justify-around items-center h-32 text-zinc-200">
+      <div>
+        <h1 className="text-lg text-center">
+          Sign In/Up with Magic Link:
+        </h1>
       </div>
-      <input
-        placeholder="Enter Email..."
-        onChange={(e) => { setEmail(e.target.value) }}
-      />
-      <button onClick={() => { signIn() }}>
-        Sign In/Up
-      </button>
+      <div className="flex flex-col text-zinc-200">
+        <input
+          placeholder="Enter Email..."
+          type="email"
+          onChange={(e) => { setEmail(e.target.value) }}
+          className="bg-zinc-200 text-black w-64"
+        />
+        <button onClick={() => { signIn() }} className="rounded bg-indigo-500 my-2 hover:text-orange-400">
+          Sign In/Up
+        </button>
+      </div>
     </div>
   );
 };
@@ -48,4 +54,14 @@ SignIn.getLayout = function getLayout(page) {
       {page}
     </Layout>
   );
+};
+
+export async function getServerSideProps({ req }) {
+  const { user } = await supabase.auth.api.getUserByCookie(req);
+
+  if (user) {
+    return { props: { user }, redirect: { destination: "/signout" } };
+  }
+
+  return { props: {} };
 };

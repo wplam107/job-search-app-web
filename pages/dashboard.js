@@ -1,6 +1,7 @@
 import Layout from '../components/layout';
+import { supabase } from '../supabaseClient';
 
-export default function Dashboard() {
+export default function Dashboard({ user }) {
   return (
     <div>
       Dashboard
@@ -14,4 +15,14 @@ Dashboard.getLayout = function getLayout(page) {
       {page}
     </Layout>
   );
+};
+
+export async function getServerSideProps({ req }) {
+  const { user } = await supabase.auth.api.getUserByCookie(req);
+
+  if (!user) {
+    return { props: {}, redirect: { destination: "/signin" } };
+  }
+
+  return { props: { user } };
 };

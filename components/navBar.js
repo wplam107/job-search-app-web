@@ -1,6 +1,6 @@
 import ActiveLink from './activeLink';
 
-export default function NavBar() {
+export default function NavBar({ authState }) {
   return (
     <nav>
       <ul className="flex space-x-4">
@@ -12,18 +12,28 @@ export default function NavBar() {
           </ActiveLink>
         </li>
         <li key="jobs">
-          <ActiveLink href="/jobs">
-            <span>
+          {authState === "auth" ? (
+            <ActiveLink href="/jobs">
+              <span>
+                Jobs
+              </span>
+            </ActiveLink>) : (
+            <span className="text-zinc-600">
               Jobs
             </span>
-          </ActiveLink>
+          )}
         </li>
         <li key="dashboard">
-          <ActiveLink href="/dashboard">
-            <span>
+          {authState === "auth" ? (
+            <ActiveLink href="/dashboard">
+              <span>
+                Dashboard
+              </span>
+            </ActiveLink>) : (
+            <span className="text-zinc-600">
               Dashboard
             </span>
-          </ActiveLink>
+          )}
         </li>
         <li key="about">
           <ActiveLink href="/about">

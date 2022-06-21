@@ -7,6 +7,6 @@
     @apply bg-zinc-900;
   }
   body {
-    @apply text-gray-300;
+    @apply text-zinc-400;
   }
 }

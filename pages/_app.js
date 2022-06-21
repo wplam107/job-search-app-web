@@ -27,7 +27,7 @@ export default function MyApp({ Component, pageProps }) {
   }, []);
 
   async function checkUser() {
-    const user = await supabase.auth.user();
+    const user = supabase.auth.user();
     if (user) {
       setAuthState("auth");
     }
