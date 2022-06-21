@@ -1,11 +1,12 @@
 import Layout from '../components/layout';
 import { supabase } from '../supabaseClient';
+import JobForm from '../components/jobForm';
 
 export default function Jobs({ user }) {
 
   return (
     <div>
-      Jobs
+      <JobForm />
     </div>
   );
 };

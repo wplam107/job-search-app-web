@@ -10,7 +10,7 @@ export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
 
   useEffect(() => {
-    const { data: authListener} = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
       handleAuthChange(event, session);
       if (event === "SIGNED_IN") {
         setAuthState("auth");

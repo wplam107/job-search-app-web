@@ -4,7 +4,7 @@ import { logoPath } from './constants';
 
 export default function Header({ authState }) {
   return (
-    <div className="sticky top-0">
+    <div className="sticky top-0 bg-zinc-900/75 backdrop-blur-sm">
       <div className="flex flex-row justify-between px-4 py-4 border-b border-zinc-700 font-bold">
         <div className="text-indigo-500">
           <span>Job Search App and Dashboard</span>
