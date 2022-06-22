@@ -2,16 +2,9 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 
-export default function JobForm() {
+export default function JobForm({ setNewForm }) {
   const [userId, setUserId] = useState("");
-  // const [company, setCompany] = useState("");
-  // const [jobTitle, setJobTitle] = useState("");
-  // const [yearsExp, setYearsExp] = useState("");
-  // const [postedAt, setPostedAt] = useState("");
-  // const [sitePosted, setSitePosted] = useState("");
-  // const [appliedAt, setAppliedAt] = useState("");
-  // const [respondedAt, setRespondedAt] = useState("");
-  // const [response, setResponse] = useState("");
+  
   const initialState = {
     company: "",
     jobTitle: "",
@@ -51,6 +44,7 @@ export default function JobForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const { error, data } = await supabase
       .from("jobs")
       .insert({
@@ -68,18 +62,19 @@ export default function JobForm() {
       console.log(error);
       alert("Error: " + error["message"]);
     } else {
-      setState({ ...initialState })
+      setState({ ...initialState });
+      setNewForm(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col">
+    <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-2">
       <label className="flex flex-col">
         <div>
-          Company<span className="text-orange-400">{" (required)"}</span>:
+          Company<span className="text-amber-500">{" (required)"}</span>:
         </div>
         <input
-          className="text-black"
+          className="text-black h-6 bg-amber-200"
           name="company"
           value={company}
           placeholder="Company name"
@@ -91,10 +86,10 @@ export default function JobForm() {
       </label>
       <label className="flex flex-col">
         <div>
-          Job Title<span className="text-orange-400">{" (required)"}</span>:
+          Job Title<span className="text-amber-500">{" (required)"}</span>:
         </div>
         <input
-          className="text-black"
+          className="text-black h-6 bg-amber-200"
           name="jobTitle"
           value={jobTitle}
           placeholder="Job title"
@@ -107,7 +102,7 @@ export default function JobForm() {
       <label className="flex flex-col">
         Years Experience:
         <input
-          className="text-black"
+          className="text-black h-6 bg-amber-200"
           name="yearsExp"
           value={yearsExp}
           placeholder="Years required/preferred"
@@ -120,7 +115,7 @@ export default function JobForm() {
       <label className="flex flex-col">
         Date Job Posted:
         <input
-          className="text-black"
+          className="text-black h-6 bg-amber-200"
           name="postedAt"
           value={postedAt}
           type="date"
@@ -132,7 +127,7 @@ export default function JobForm() {
       <label className="flex flex-col">
         Site/Job Board:
         <input
-          className="text-black"
+          className="text-black h-6 bg-amber-200"
           name="sitePosted"
           value={sitePosted}
           placeholder="Site of job posting"
@@ -143,10 +138,10 @@ export default function JobForm() {
       </label>
       <label className="flex flex-col">
         <div>
-          Date Applied<span className="text-orange-400">{" (required)"}</span>:
+          Date Applied<span className="text-amber-500">{" (required)"}</span>:
         </div>
         <input
-          className="text-black"
+          className="text-black h-6 bg-amber-200"
           name="appliedAt"
           value={appliedAt}
           type="date"
@@ -159,7 +154,7 @@ export default function JobForm() {
       <label className="flex flex-col">
         Date Responded:
         <input
-          className="text-black"
+          className="text-black h-6 bg-amber-200"
           name="respondedAt"
           value={respondedAt}
           type="date"
@@ -171,7 +166,7 @@ export default function JobForm() {
       <label className="flex flex-col">
         Company Response:
         <input
-          className="text-black"
+          className="text-black h-6 bg-amber-200"
           name="response"
           value={response}
           placeholder="Company response"
@@ -180,7 +175,9 @@ export default function JobForm() {
         >
         </input>
       </label>
-      <button type="submit">Submit Job</button>
+      <div className="col-span-2 flex justify-center">
+        <button type="submit" className="rounded-md bg-amber-500 text-zinc-900 hover:bg-amber-200 px-2">Submit Job</button>
+      </div>
     </form>
   );
 }
