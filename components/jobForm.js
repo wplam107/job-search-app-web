@@ -38,7 +38,6 @@ export default function JobForm({ setNewForm }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(typeof(value));
     setState((prevState) => ({ ...prevState, [name]: value }));
   };
 
@@ -51,7 +50,7 @@ export default function JobForm({ setNewForm }) {
         user_id: userId,
         company: company,
         job_title: jobTitle,
-        years_experience: typeof(yearsExp) === "number" ? yearsExp : null,
+        years_experience: yearsExp === "" ? null : Number(yearsExp),
         posted_at: postedAt === "" ? null : postedAt,
         site_posted: sitePosted === "" ? null : sitePosted,
         applied_at: appliedAt,

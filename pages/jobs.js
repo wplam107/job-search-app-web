@@ -29,6 +29,7 @@ export default function Jobs({ user }) {
 
   return (
     <div className="flex flex-col items-center w-full">
+      <h1 className="text-xl my-2 text-amber-600">Jobs Page</h1>
       <NewFormButton />
       {newForm && <JobForm setNewForm={setNewForm} />}
       <JobsList newForm={newForm} />

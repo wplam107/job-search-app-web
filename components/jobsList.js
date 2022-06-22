@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
-import { trashPath, pencilPath } from "./icons";
+import JobItem from "./jobItem";
 
 export default function JobsList({ newForm }) {
   const [jobs, setJobs] = useState([]);
+  const [jobsLoading, setJobsLoading] = useState(false);
   const [deleteJob, setDeleteJob] = useState(0);
 
   useEffect(() => {
@@ -11,6 +12,7 @@ export default function JobsList({ newForm }) {
   }, [deleteJob, setDeleteJob, newForm]);
 
   const getJobs = async () => {
+    setJobsLoading(true);
     const { error, data } = await supabase
       .from("jobs")
       .select("*")
@@ -20,93 +22,27 @@ export default function JobsList({ newForm }) {
       alert("Error: " + error["message"]);
     } else {
       setJobs(data);
+      setJobsLoading(false);
     }
   };
 
+  if (jobs.length === 0 && jobsLoading === false) {
+    return (
+      <div className="my-4 flex flex-col items-center animate-bounce">
+        <svg 
+        viewBox="0 0 24 24"
+        className="fill-zinc-400 w-12 h-12"
+        >
+          <path d="M18.655 10.405a.75.75 0 000-1.06l-6.25-6.25a.75.75 0 00-1.06 0l-6.25 6.25a.75.75 0 101.06 1.06l4.97-4.97v14.44a.75.75 0 001.5 0V5.435l4.97 4.97a.75.75 0 001.06 0z" />
+        </svg>
+        <h2 className="text-lg">Add Job Applications</h2>
+      </div>
+    );
+  }
+
   return (
-    <ul className="my-2">
-      {jobs.map((job, idx) => <JobItem key={job["id"]} job={job} idx={idx} deleteJob={deleteJob} setDeleteJob={setDeleteJob} />)}
+    <ul className="my-2 min-w-full justify-around">
+      {jobs.map((job, idx) => <JobItem key={job["id"]} job={job} idx={idx} deleteJob={deleteJob} setDeleteJob={setDeleteJob} getJobs={getJobs} />)}
     </ul>
-  );
-};
-
-const JobItem = ({ job, idx, deleteJob, setDeleteJob }) => {
-  const {
-    id,
-    company, 
-    job_title, 
-    years_experience, 
-    posted_at, 
-    site_posted, 
-    applied_at, 
-    responded_at, 
-    response 
-  } = job;
-
-  const handleClickTrash = async () => {
-    const result = confirm(`Warning: Delete ${job_title} at ${company}?`);
-    if (result === true) {
-      const { error, data } = await supabase
-        .from("jobs")
-        .delete()
-        .match({ id: id });
-
-      if (error) {
-        alert("Error: " + error["message"]);
-      }
-      if (data) {
-        setDeleteJob(deleteJob + 1);
-      }
-    }
-  };
-
-  return (
-    <li key={`${id}-${company}`} className={idx === 0 ? "hover:bg-zinc-800 py-2" : "hover:bg-zinc-800 py-2 border-t border-zinc-700"}>
-      <ul className="grid grid-cols-3 gap-x-4 gap-y-1">
-        <li key={`company-${id}`}>
-          <span className="text-sky-600 font-bold">Company:</span>{` ${company}`}
-        </li>
-        <li key={`job_title-${id}`}>
-          <span className="text-sky-600 font-bold">Job Title:</span>{` ${job_title}`}
-        </li>
-        <li key={`years_experience-${id}`}>
-          <span className="text-sky-600 font-bold">Years Experience:</span>{` ${years_experience !== null ? years_experience : ""}`}
-        </li>
-        <li key={`posted_at-${id}`}>
-          <span className="text-sky-600 font-bold">Date Posted:</span>{` ${posted_at !== null ? posted_at : ""}`}
-        </li>
-        <li key={`site_posted-${id}`}>
-          <span className="text-sky-600 font-bold">Site/Job Board:</span>{` ${site_posted !== null ? site_posted : ""}`}
-        </li>
-        <li key={`applied_at-${id}`}>
-          <span className="text-sky-600 font-bold">Date Applied:</span>{` ${applied_at}`}
-        </li>
-        <li key={`responded_at-${id}`}>
-          <span className="text-sky-600 font-bold">Date Responded:</span>{` ${responded_at !== null ? responded_at : ""}`}
-        </li>
-        <li key={`response-${id}`}>
-          <span className="text-sky-600 font-bold">Company Response:</span>{` ${response !== null ? response : ""}`}
-        </li>
-        <li key={`edit-${id}`} className="flex flex-row justify-left">
-          <span className="text-red-400 font-bold">Edit Job Posting:</span>
-          <div className="pl-4 pr-2" onClick={handleClickTrash}>
-            <svg 
-              viewBox="0 0 16 16"
-              className="fill-zinc-400 w-6 h-6 hover:fill-red-400 cursor-pointer"
-            >
-              <path d={trashPath} />
-            </svg>
-          </div>
-          <div className="px-2">
-            <svg 
-              viewBox="0 0 16 16"
-              className="fill-zinc-400 w-6 h-6 hover:fill-red-400 cursor-pointer"
-            >
-              <path d={pencilPath} />
-            </svg>
-          </div>
-        </li>
-      </ul>
-    </li>
   );
 };
