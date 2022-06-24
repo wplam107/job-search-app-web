@@ -87,7 +87,7 @@ export default function JobItem({ job, idx, deleteJob, setDeleteJob, getJobs }) 
         site_posted: sitePosted === "" ? null : sitePosted,
         applied_at: appliedAt,
         responded_at: respondedAt === "" ? null : respondedAt,
-        response: newResponse === "" ? null : response
+        response: newResponse === "" ? null : newResponse
       })
       .match({ id: id });
 
@@ -109,10 +109,10 @@ export default function JobItem({ job, idx, deleteJob, setDeleteJob, getJobs }) 
     <li key={`${id}-${company}`} className={idx === 0 ? "hover:bg-zinc-800 py-2" : "hover:bg-zinc-800 py-2 border-t border-zinc-700"}>
       <form>
         <ul className="grid grid-cols-3 gap-x-4 gap-y-1">
-          <li key={`company-${id}`} className="flex flex-col justify-start">
-            <span className="text-sky-600 font-bold">
+          <li key={`company-${id}`} className="flex flex-col justify-start pl-4">
+            <label className="text-sky-600 font-bold">
               Company:
-            </span>
+            </label>
             {isEdit 
               ? <input 
                   name="newCompany"
@@ -125,10 +125,10 @@ export default function JobItem({ job, idx, deleteJob, setDeleteJob, getJobs }) 
               : ` ${company}`
             }
           </li>
-          <li key={`job_title-${id}`} className="flex flex-col justify-start">
-            <span className="text-sky-600 font-bold">
+          <li key={`job_title-${id}`} className="flex flex-col justify-start pl-4">
+            <label className="text-sky-600 font-bold">
               Job Title:
-            </span>
+            </label>
             {isEdit
               ? <input
                   className="text-black h-6 bg-amber-200"
@@ -141,10 +141,10 @@ export default function JobItem({ job, idx, deleteJob, setDeleteJob, getJobs }) 
               : ` ${job_title}`
             }
           </li>
-          <li key={`years_experience-${id}`} className="flex flex-col justify-start">
-            <span className="text-sky-600 font-bold">
+          <li key={`years_experience-${id}`} className="flex flex-col justify-start pl-4">
+            <label className="text-sky-600 font-bold">
               Years Experience:
-            </span>
+            </label>
             {isEdit
               ? <input
                   className="text-black h-6 bg-amber-200"
@@ -157,10 +157,10 @@ export default function JobItem({ job, idx, deleteJob, setDeleteJob, getJobs }) 
               : ` ${years_experience !== null ? years_experience : ""}`
             }
           </li>
-          <li key={`posted_at-${id}`} className="flex flex-col justify-start">
-            <span className="text-sky-600 font-bold">
+          <li key={`posted_at-${id}`} className="flex flex-col justify-start pl-4">
+            <label className="text-sky-600 font-bold">
               Date Posted:
-            </span>
+            </label>
             {isEdit
               ? <input
                   className="text-black h-6 bg-amber-200"
@@ -173,10 +173,10 @@ export default function JobItem({ job, idx, deleteJob, setDeleteJob, getJobs }) 
               : ` ${posted_at !== null ? posted_at : ""}`
             }
           </li>
-          <li key={`site_posted-${id}`} className="flex flex-col justify-start">
-            <span className="text-sky-600 font-bold">
+          <li key={`site_posted-${id}`} className="flex flex-col justify-start pl-4">
+            <label className="text-sky-600 font-bold">
               Site/Job Board:
-            </span>
+            </label>
             {isEdit
               ? <input
                   className="text-black h-6 bg-amber-200"
@@ -188,10 +188,10 @@ export default function JobItem({ job, idx, deleteJob, setDeleteJob, getJobs }) 
               : ` ${site_posted !== null ? site_posted : ""}`
             }
           </li>
-          <li key={`applied_at-${id}`} className="flex flex-col justify-start">
-            <span className="text-sky-600 font-bold">
+          <li key={`applied_at-${id}`} className="flex flex-col justify-start pl-4">
+            <label className="text-sky-600 font-bold">
               Date Applied:
-            </span>
+            </label>
             {isEdit
               ? <input
                   className="text-black h-6 bg-amber-200"
@@ -205,10 +205,10 @@ export default function JobItem({ job, idx, deleteJob, setDeleteJob, getJobs }) 
               : ` ${applied_at}`
             }
           </li>
-          <li key={`responded_at-${id}`} className="flex flex-col justify-start">
-            <span className="text-sky-600 font-bold">
+          <li key={`responded_at-${id}`} className="flex flex-col justify-start pl-4">
+            <label className="text-sky-600 font-bold">
               Date Responded:
-            </span>
+            </label>
             {isEdit
               ? <input
                   className="text-black h-6 bg-amber-200"
@@ -221,42 +221,42 @@ export default function JobItem({ job, idx, deleteJob, setDeleteJob, getJobs }) 
               : ` ${responded_at !== null ? responded_at : ""}`
             }
           </li>
-          <li key={`response-${id}`} className="flex flex-col justify-start">
-            <span className="text-sky-600 font-bold">
+          <li key={`response-${id}`} className="flex flex-col justify-start pl-4">
+            <label className="text-sky-600 font-bold">
               Company Response:
-            </span>
+            </label>
             {isEdit
               ? <input
                   className="text-black h-6 bg-amber-200"
                   name="newResponse"
                   value={newResponse}
-                  placeholder="Company response"
                   onChange={handleChange}
                   size={40}
                 />
               : ` ${response !== null ? response : ""}`
             }
           </li>
-          <li key={`edit-${id}`} className="flex flex-col justify-start">
-            <span className="text-red-400 font-bold">Edit Job Posting:</span>
-            <div className="flex flex-row justify-start">
-              <div className="pl-6 pr-2" onClick={isEdit ? closeEdit : handleClickTrash}>
-                <svg 
-                  viewBox="0 0 16 16"
-                  className="fill-zinc-400 w-6 h-6 hover:fill-red-400 cursor-pointer"
-                >
-                  <path d={isEdit ? noPath : trashPath} />
-                </svg>
+          <li key={`edit-${id}`} className="flex flex-col justify-start pl-4">
+            <label className="text-red-400 font-bold">Edit Job Posting:
+              <div className="flex flex-row justify-start">
+                <button className="pl-6 pr-2" onClick={isEdit ? closeEdit : handleClickTrash} aria-label={isEdit ? "Cancel Job Edit" : "Delete Job"}>
+                  <svg 
+                    viewBox="0 0 16 16"
+                    className="fill-zinc-400 w-6 h-6 hover:fill-red-400 cursor-pointer"
+                  >
+                    <path d={isEdit ? noPath : trashPath} />
+                  </svg>
+                </button>
+                <button className="px-2" onClick={isEdit ? submitEdit : handleClickEdit} aria-label={isEdit ? "Submit Job Edit" : "Edit Job"}>
+                  <svg 
+                    viewBox="0 0 16 16"
+                    className="fill-zinc-400 w-6 h-6 hover:fill-red-400 cursor-pointer"
+                  >
+                    <path d={isEdit ? yesPath : pencilPath} />
+                  </svg>
+                </button>
               </div>
-              <div className="px-2" onClick={isEdit ? submitEdit : handleClickEdit}>
-                <svg 
-                  viewBox="0 0 16 16"
-                  className="fill-zinc-400 w-6 h-6 hover:fill-red-400 cursor-pointer"
-                >
-                  <path d={isEdit ? yesPath : pencilPath} />
-                </svg>
-              </div>
-            </div>
+            </label>
           </li>
         </ul>
       </form>

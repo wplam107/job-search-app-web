@@ -12,7 +12,7 @@ export default function SignIn({ user }) {
     });
 
     if (error) {
-      console.log({ error });
+      alert(error["message"]);
     } else {
       setSubmitted(true);
     }
@@ -28,11 +28,6 @@ export default function SignIn({ user }) {
 
   return (
     <div className="flex flex-col justify-around items-center h-32 text-zinc-200">
-      <div>
-        <h1 className="text-lg text-center">
-          Sign In/Up with Magic Link:
-        </h1>
-      </div>
       <div className="flex flex-col text-zinc-200">
         <input
           placeholder="Enter Email..."
@@ -41,7 +36,7 @@ export default function SignIn({ user }) {
           className="bg-zinc-200 text-black w-64"
         />
         <button onClick={() => { signIn() }} className="rounded bg-indigo-500 my-2 hover:text-orange-400">
-          Sign In/Up
+          Sign In/Up with Magic Link
         </button>
       </div>
     </div>
@@ -50,7 +45,7 @@ export default function SignIn({ user }) {
 
 SignIn.getLayout = function getLayout(page) {
   return (
-    <Layout>
+    <Layout name="Sign In Page">
       {page}
     </Layout>
   );

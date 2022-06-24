@@ -1,17 +1,17 @@
 import Layout from '../components/layout';
 import { supabase } from '../supabaseClient';
 
-export default function Dashboard({ user }) {
+export default function Interviews({ user }) {
   return (
     <div>
-      Dashboard Object
+      Interviews List
     </div>
   );
 };
 
-Dashboard.getLayout = function getLayout(page) {
+Interviews.getLayout = function getLayout(page) {
   return (
-    <Layout name="Dashboard Page">
+    <Layout name="Interviews Page">
       {page}
     </Layout>
   );

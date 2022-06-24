@@ -13,7 +13,7 @@ export default function NavBar({ authState }) {
         </li>
         <li key="jobs">
           {authState === "auth" ? (
-            <ActiveLink href="/jobs">
+            <ActiveLink href="/jobs" name="jobs">
               <span>
                 Jobs
               </span>
@@ -23,9 +23,21 @@ export default function NavBar({ authState }) {
             </span>
           )}
         </li>
+        <li key="interviews">
+          {authState === "auth" ? (
+            <ActiveLink href="/interviews" name="interviews">
+              <span>
+                Interviews
+              </span>
+            </ActiveLink>) : (
+            <span className="text-zinc-600">
+              Interviews
+            </span>
+          )}
+        </li>
         <li key="dashboard">
           {authState === "auth" ? (
-            <ActiveLink href="/dashboard">
+            <ActiveLink href="/dashboard" name="dashboard">
               <span>
                 Dashboard
               </span>
@@ -36,7 +48,7 @@ export default function NavBar({ authState }) {
           )}
         </li>
         <li key="about">
-          <ActiveLink href="/about">
+          <ActiveLink href="/about" name="about">
             <span>
               About
             </span>

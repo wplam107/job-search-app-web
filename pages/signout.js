@@ -16,17 +16,16 @@ export default function SignOut({ user }) {
 
   return (
     <div className="flex flex-col w-64">
-      <h1 className="text-lg text-center text-indigo-500">
-        Sign Out:
-      </h1>
-      <button onClick={handleClick} className="rounded bg-indigo-500 my-2 text-zinc-200 hover:text-orange-400">Sign Out</button>
+      <button onClick={handleClick} className="rounded bg-indigo-500 my-2 text-zinc-200 hover:text-orange-400">
+        Sign Out
+      </button>
     </div>
   );
 };
 
 SignOut.getLayout = function getLayout(page) {
   return (
-    <Layout>
+    <Layout name="Sign Out Page">
       {page}
     </Layout>
   );

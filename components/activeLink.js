@@ -14,14 +14,16 @@ function ActiveLink({ children, href, name }) {
   }, [router.asPath]);
 
   const handleClick = (e) => {
-    e.preventDefault()
-    router.push(href)
+    e.preventDefault();
+    router.push(href);
   };
 
   return (
-    <a href={href} onClick={handleClick} className={className}>
-      {children}
-    </a>
+    <button onClick={handleClick}>
+      <a href={href} className={className}>
+        {children}
+      </a>
+    </button>
   );
 };
 

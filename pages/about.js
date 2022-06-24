@@ -10,7 +10,7 @@ export default function About() {
 
 About.getLayout = function getLayout(page) {
   return (
-    <Layout>
+    <Layout name="About Page">
       {page}
     </Layout>
   );

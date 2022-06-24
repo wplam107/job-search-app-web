@@ -175,7 +175,9 @@ export default function JobForm({ setNewForm }) {
         </input>
       </label>
       <div className="col-span-2 flex justify-center">
-        <button type="submit" className="rounded-md bg-amber-500 text-zinc-900 hover:bg-amber-200 px-2">Submit Job</button>
+        <button type="submit" className="rounded-md bg-amber-500 text-zinc-900 hover:bg-amber-200 px-2">
+          Submit Job
+        </button>
       </div>
     </form>
   );

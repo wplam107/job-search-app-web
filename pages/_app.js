@@ -14,7 +14,6 @@ export default function MyApp({ Component, pageProps }) {
       handleAuthChange(event, session);
       if (event === "SIGNED_IN") {
         setAuthState("auth");
-        router.push("/");
       }
       if (event === "SIGNED_OUT") {
         setAuthState("not-auth");
@@ -53,11 +52,6 @@ export default function MyApp({ Component, pageProps }) {
       </Head>
       <Header authState={authState} />
       {getLayout(<Component {...pageProps} />)}
-      <footer className="flex flex-1 py-8 border-t border-zinc-700 justify-center items-center">
-        <div>
-          Footer
-        </div>
-      </footer>
     </div>
   );
 };

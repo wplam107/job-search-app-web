@@ -2,8 +2,7 @@ import Layout from '../components/layout';
 
 export default function Index() {
   return (
-    <div>
-      <h1>Hello World</h1>
+    <div className="flex flex-col items-center w-full">
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce semper auctor hendrerit. Curabitur varius pellentesque velit congue hendrerit. In feugiat, erat in viverra hendrerit, risus sem consectetur ipsum, at volutpat augue lorem eget orci. Aenean volutpat eu felis eget dapibus. Sed ornare risus risus, ac ultricies odio suscipit in. In aliquam augue non magna porta, vitae ornare odio vulputate. Phasellus vestibulum mattis odio, ac egestas ipsum sodales in. Aliquam sit amet aliquam dui, et commodo lectus. Cras dapibus, diam eget eleifend rhoncus, purus velit dignissim lacus, vel posuere odio sem vitae felis. Etiam condimentum justo diam, vitae rutrum odio luctus ut. Duis eget nibh eu risus tincidunt hendrerit in vel orci. Sed egestas purus quis dolor viverra congue. Nullam eget dolor hendrerit, volutpat sem eget, euismod mi. Quisque nec magna vitae nunc accumsan fringilla. Nullam vel mauris ut sapien placerat ultrices in non mauris.
       </p>
@@ -25,7 +24,7 @@ export default function Index() {
 
 Index.getLayout = function getLayout(page) {
   return (
-    <Layout>
+    <Layout name="Home Page">
       {page}
     </Layout>
   );
