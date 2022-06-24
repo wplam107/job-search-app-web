@@ -1,22 +1,47 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 import JobItem from "./jobItem";
+import { FiltersContext } from "../context/filtersContext";
 
 export default function JobsList({ newForm }) {
   const [jobs, setJobs] = useState([]);
   const [jobsLoading, setJobsLoading] = useState(false);
   const [deleteJob, setDeleteJob] = useState(0);
 
+  const [[
+    companyFilter,
+    jobTitleFilter,
+    appliedDateBeginFilter,
+    appliedDateEndFilter,
+    responseFilter
+  ], ] = useContext(FiltersContext);
+
   useEffect(() => {
     getJobs();
-  }, [deleteJob, setDeleteJob, newForm]);
+  }, [
+    deleteJob,
+    setDeleteJob,
+    newForm,
+    companyFilter,
+    jobTitleFilter,
+    appliedDateBeginFilter,
+    appliedDateEndFilter,
+    responseFilter
+  ]);
 
   const getJobs = async () => {
     setJobsLoading(true);
-    const { error, data } = await supabase
-      .from("jobs")
-      .select("*")
-      .order("applied_at", { ascending: false });
+    let query = supabase.from("jobs").select("*");
+
+    if (companyFilter !== "") { query = query.eq("company", companyFilter) };
+    if (jobTitleFilter !== "") { query = query.eq("job_title", jobTitleFilter) };
+    if (appliedDateBeginFilter !== "" && appliedDateEndFilter !== "") { 
+      query = query.gte("applied_at", appliedDateBeginFilter).lte("applied_at", appliedDateEndFilter);
+    };
+    if (responseFilter !== "") { query = query.eq("response", responseFilter)};
+
+    query = query.order("applied_at", { ascending: false }).order("company", { ascending: true });
+    const { error, data } = await query;
 
     if (error) {
       alert("Error: " + error["message"]);
