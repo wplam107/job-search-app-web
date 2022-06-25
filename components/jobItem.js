@@ -239,7 +239,10 @@ export default function JobItem({ job, idx, deleteJob, setDeleteJob, getJobs }) 
           <li key={`edit-${id}`} className="flex flex-col justify-start pl-4">
             <label className="text-red-400 font-bold">Edit Job Posting:
               <div className="flex flex-row justify-start">
-                <button className="pl-6 pr-2" onClick={isEdit ? closeEdit : handleClickTrash} aria-label={isEdit ? "Cancel Job Edit" : "Delete Job"}>
+                <button className="mr-2 px-2 rounded-md bg-amber-500 text-zinc-900 hover:bg-amber-200 text-sm">
+                  Add Interview
+                </button>
+                <button className="mx-2" onClick={isEdit ? closeEdit : handleClickTrash} aria-label={isEdit ? "Cancel Job Edit" : "Delete Job"}>
                   <svg 
                     viewBox="0 0 16 16"
                     className="fill-zinc-400 w-6 h-6 hover:fill-red-400 cursor-pointer"
@@ -247,7 +250,7 @@ export default function JobItem({ job, idx, deleteJob, setDeleteJob, getJobs }) 
                     <path d={isEdit ? noPath : trashPath} />
                   </svg>
                 </button>
-                <button className="px-2" onClick={isEdit ? submitEdit : handleClickEdit} aria-label={isEdit ? "Submit Job Edit" : "Edit Job"}>
+                <button className="mx-2" onClick={isEdit ? submitEdit : handleClickEdit} aria-label={isEdit ? "Submit Job Edit" : "Edit Job"}>
                   <svg 
                     viewBox="0 0 16 16"
                     className="fill-zinc-400 w-6 h-6 hover:fill-red-400 cursor-pointer"

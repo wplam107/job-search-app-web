@@ -2,10 +2,7 @@ export default function Layout(props) {
   return (
     <div className="px-8">
       <main className="min-h-screen px-8 py-4 w-full flex flex-col items-center">
-        <h1 className="text-4xl mb-4 text-amber-600">
-          {props.name}
-        </h1>
-        <div className="w-full">
+        <div className="w-full flex flex-col content-between">
           {props.children}
         </div>
       </main>
