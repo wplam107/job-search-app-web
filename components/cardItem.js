@@ -11,7 +11,7 @@ export default function InputItem({ itemType, type, name, label, value, size, is
 
   if (itemType === "value") {
     return (
-      <li className="flex flex-col items-start">
+      <li className="flex flex-col items-center">
         <label className="text-sky-600 font-bold">
           {label}:
         </label>
@@ -23,7 +23,7 @@ export default function InputItem({ itemType, type, name, label, value, size, is
   }
 
   return (
-    <li className="flex flex-col items-start">
+    <li className="flex flex-col items-center">
       <label className="text-sky-600 font-bold">
         {label}<span className="text-amber-500">{isRequired && " (required)"}</span>:
       </label>

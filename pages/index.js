@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Layout from '../components/layout';
-import { supabase } from '../supabaseClient';
+import { supabase } from './api/supabaseClient';
 
 export default function Index() {
   const [totalAppJobs, setTotalAppJobs] = useState(0);

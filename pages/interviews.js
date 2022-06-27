@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import Layout from '../components/layout';
-import { supabase } from '../supabaseClient';
+import { supabase } from './api/supabaseClient';
 import Card from '../components/card';
-import InputItem from '../components/cardItem';
-import CardControls from '../components/cardControls';
+import { interviewCols as cols } from '../components/dataColumns';
+import { deleteInterview, updateInterview } from '../components/supabaseOperations';
+import { ControlButton } from '../components/buttons';
+import parseFormValues from '../utils/parseFormValues';
 
 export default function Interviews({ user }) {
   const userId = user.id;
@@ -15,7 +17,7 @@ export default function Interviews({ user }) {
   }, []);
 
   const retrieveInterviews = async () => {
-    const { data, error } = await supabase.from("interviews").select("*");
+    const { error, data } = await supabase.rpc("user_interviews");
     if (error) {
       alert(`Error: ${error["message"]}`);
     } else {
@@ -23,7 +25,7 @@ export default function Interviews({ user }) {
     }
   };
 
-  const handleToggleEdit = (key, e) => {
+  const handleToggleEdit = (e, key) => {
     e.preventDefault();
     if (edittingInterview !== key) {
       setEdittingInterview(key);
@@ -32,50 +34,67 @@ export default function Interviews({ user }) {
     }
   };
 
-  const cols = [
-    { name: "job_id", label: "Job ID", type: "text", required: true },
-    { name: "interview_type", label: "Interview Type", type: "text", required: false },
-    { name: "interview_at", label: "Interview Date", type: "date", required: true },
-    { name: "response", label: "Company Response", type: "text", required: false },
-    { name: "responded_at", label: "Response Date", type: "date", required: false }
-  ];
+  const handleSubmit = async (e, interviewId) => {
+    e.preventDefault();
+    const values = parseFormValues(e.target);
+
+    await updateInterview(supabase, values, interviewId);
+    setEdittingInterview("");
+    retrieveInterviews();
+  };
+
+  const handleDelete = async (e, ele) => {
+    e.preventDefault();
+
+    const result = confirm(`Warning: Delete Interview?`);
+    if (result === true) {
+      await deleteInterview(supabase, ele["id"]);
+      setEdittingInterview("");
+      retrieveInterviews();
+    }
+  };
 
   return (
-    <div>
-      <h1 className="text-4xl mb-4 text-amber-600">
-        Add/Edit Interviews
-      </h1>
-      Interviews List
-      <ul className="divide-y divide-zinc-700">
-        {interviews.map((ele) => {
-          const key = ele["id"].toString();
-          return (
-            <Card key={key}>
-              <div className="grid grid-cols-3">
-                {cols.map((col) => {
-                  return (
-                    <InputItem
-                      key={`${key}-${col.name}`}
-                      itemType={edittingInterview !== key ? "value" : "input"}
-                      type={col.type}
-                      name={col.name}
-                      label={col.label}
-                      value={ele[col.name]}
-                      size={60}
-                      isRequired={col.required}
-                    />
-                  );
-                })}
-                <CardControls key={`${key}-controls`} label="Edit Interview:">
-                  <button onClick={(e) => handleToggleEdit(key, e)}>
-                    {edittingInterview !== key ? "Edit" : "Close"}
-                  </button>
-                </CardControls>
-              </div>
-            </Card>
-          );
-        })}
-      </ul>
+    <div className="grid grid-cols-4 my-4 w-full">
+      <div className="col-span-1 flex flex-col items-center">
+        Side Bar
+      </div>
+      <div className="col-span-3 flex flex-col items-center">
+        <h1 className="text-4xl mb-4 text-amber-600">
+          Edit Interviews
+        </h1>
+        <ul className="divide-y divide-zinc-700 my-4 w-full">
+          {interviews.map((ele) => {
+            const key = ele["id"].toString();
+            return (
+              <Card
+                key={key}
+                cardKey={key}
+                element={ele}
+                cols={cols}
+                itemType={edittingInterview !== key ? "value" : "input"}
+                handleSubmit={(e) => handleSubmit(e, key)}
+              >
+                <ControlButton onClick={(e) => handleToggleEdit(e, key)}>
+                  {edittingInterview !== key ? "Edit" : "Close"}
+                </ControlButton>
+                {edittingInterview === key
+                  ? <ControlButton type="submit">
+                      Update
+                    </ControlButton>
+                  : null
+                }
+                {edittingInterview === key
+                  ? <ControlButton onClick={(e) => handleDelete(e, ele)}>
+                      Delete
+                    </ControlButton>
+                  : null
+                }
+              </Card>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 };

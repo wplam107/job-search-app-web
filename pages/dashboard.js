@@ -1,5 +1,5 @@
 import Layout from '../components/layout';
-import { supabase } from '../supabaseClient';
+import { supabase } from './api/supabaseClient';
 
 export default function Dashboard({ user }) {
   return (

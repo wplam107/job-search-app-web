@@ -3,7 +3,7 @@ import '../styles/globals.css';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Header from '../components/header';
-import { supabase } from '../supabaseClient';
+import { supabase } from './api/supabaseClient';
 import { FiltersContext } from '../context/filtersContext';
 
 export default function MyApp({ Component, pageProps }) {

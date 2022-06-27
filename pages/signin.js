@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { supabase } from '../supabaseClient';
+import { supabase } from './api/supabaseClient';
 import Layout from '../components/layout';
 
 export default function SignIn({ user }) {

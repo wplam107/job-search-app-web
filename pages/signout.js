@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { supabase } from '../supabaseClient';
+import { supabase } from './api/supabaseClient';
 import Layout from '../components/layout';
 
 export default function SignOut({ user }) {
@@ -15,7 +15,7 @@ export default function SignOut({ user }) {
   };
 
   return (
-    <div className="flex flex-col w-64">
+    <div className="flex flex-col w-64 items-center">
       <button onClick={handleClick} className="rounded bg-indigo-500 my-2 text-zinc-200 hover:text-orange-400">
         Sign Out
       </button>
