@@ -1,3 +1,5 @@
+import { plusCirclePath } from "./icons";
+
 export const LabelledButton = ({ label, align, style, onClick, children }) => {
   return (
     <div className={align}>
@@ -19,6 +21,17 @@ export const ControlButton = ({ onClick, type, children }) => {
       type={type}
     >
       {children}
+    </button>
+  );
+};
+
+export const ToggleNewFormButton = ({ onClick, transition, ariaLabel }) => {
+  const className = "cursor-pointer " + transition;
+  return (
+    <button onClick={onClick} className={className} aria-label={ariaLabel}>
+      <svg viewBox="0 0 16 16" className="fill-zinc-400 w-6 h-6 hover:fill-orange-400">
+        <path d={plusCirclePath} />
+      </svg>
     </button>
   );
 };

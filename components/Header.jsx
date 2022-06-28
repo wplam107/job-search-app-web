@@ -1,5 +1,5 @@
-import ActiveLink from './activeLink';
-import NavBar from './navBar';
+import ActiveLink from './ActiveLink';
+import NavBar from './NavBar';
 import { logoPath } from './icons';
 
 export default function Header({ authState }) {

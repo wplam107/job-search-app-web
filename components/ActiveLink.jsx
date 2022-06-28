@@ -2,18 +2,18 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 function ActiveLink({ children, href, name }) {
-  const [className, setClassName] = useState("hover:text-orange-400");
+  const [className, setClassName] = useState('hover:text-orange-400');
   const router = useRouter();
 
   useEffect(() => {
-    if (router.asPath === href || (name === "home" && router.asPath === "/#")) {
-      setClassName("text-orange-400");
+    if (router.asPath === href || (name === 'home' && router.asPath === '/#')) {
+      setClassName('text-orange-400');
     } else {
-      setClassName("hover:text-orange-400");
+      setClassName('hover:text-orange-400');
     }
   }, [router.asPath]);
 
-  const handleClick = (e) => {
+  function handleClick(e) {
     e.preventDefault();
     router.push(href);
   };

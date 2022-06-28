@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import { FiltersContext } from "../context/filtersContext";
 
 export default function SideBar() {
   const initialState = {

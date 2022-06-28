@@ -8,12 +8,12 @@ export const interviewCols = [
 ];
 
 export const jobCols = [
-  { name: "company", label: "Company", type: "text", required: true },
-  { name: "job_title", label: "Job Title", type: "text", required: true },
+  { name: "company", label: "Company", type: "text", required: true, isTitle: true },
+  { name: "job_title", label: "Job Title", type: "text", required: true, isTitle: true },
+  { name: "applied_at", label: "Date Applied", type: "date", required: true, isTitle: true },
   { name: "years_experience", label: "Years Exp.", type: "number", required: false },
   { name: "posted_at", label: "Date of Job Post", type: "date", required: false },
   { name: "site_posted", label: "Job Board/Site", type: "text", required: false },
-  { name: "applied_at", label: "Date Applied", type: "date", required: true },
   { name: "response", label: "Company Response", type: "text", required: false },
   { name: "responded_at", label: "Response Date", type: "date", required: false },
 ];

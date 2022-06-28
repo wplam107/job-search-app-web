@@ -4,8 +4,9 @@ import { supabase } from './api/supabaseClient';
 import Card from '../components/card';
 import { interviewCols as cols } from '../components/dataColumns';
 import { deleteInterview, updateInterview } from '../components/supabaseOperations';
-import { ControlButton } from '../components/buttons';
+import { ControlButton, ToggleNewFormButton } from '../components/buttons';
 import parseFormValues from '../utils/parseFormValues';
+import CardList from '../components/cardList';
 
 export default function Interviews({ user }) {
   const userId = user.id;
@@ -54,6 +55,21 @@ export default function Interviews({ user }) {
     }
   };
 
+  const handleDownload = async (e) => {
+    e.preventDefault();
+
+    const { data, error } = await supabase.from("interviews").select("*");
+    if (error) {
+      alert("Error: " + error["message"]);
+    } else {
+      const fileName = "interviews.json";
+      const fileToSave = new Blob([JSON.stringify(data, undefined, 2)], {
+        type: "application/json"
+      });
+      saveAs(fileToSave, fileName);
+    }
+  };
+
   return (
     <div className="grid grid-cols-4 my-4 w-full">
       <div className="col-span-1 flex flex-col items-center">
@@ -63,7 +79,10 @@ export default function Interviews({ user }) {
         <h1 className="text-4xl mb-4 text-amber-600">
           Edit Interviews
         </h1>
-        <ul className="divide-y divide-zinc-700 my-4 w-full">
+        <button onClick={handleDownload} className="rounded-full bg-orange-400 hover:bg-orange-200 px-2 m-2 text-black">
+          Download Interviews
+        </button>
+        <CardList>
           {interviews.map((ele) => {
             const key = ele["id"].toString();
             return (
@@ -93,7 +112,7 @@ export default function Interviews({ user }) {
               </Card>
             );
           })}
-        </ul>
+        </CardList>
       </div>
     </div>
   );
