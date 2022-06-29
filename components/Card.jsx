@@ -14,9 +14,9 @@ export default function Card({ children, element, dataColumns }) {
               <Disclosure.Button className="flex items-center w-full py-1 rounded-lg justify-between bg-sky-300">
                 <div className="grid grid-cols-3 w-[95%]">
                   {titleCols.map((col) => (
-                    <div key={col.name} className="flex flex-row justify-start">
-                      <span className="text-sky-800 px-2 font-bold">{col.label}:</span>
-                      <span className="text-zinc-800">{element[col.name]}</span>
+                    <div key={col.name} className="flex justify-start">
+                      <span className="text-left text-sky-800 px-2 font-bold">{col.label}:</span>
+                      <span className="text-left text-zinc-800 whitespace-nowrap overflow-x-scroll">{element[col.name]}</span>
                     </div>
                   ))}
                 </div>
@@ -33,9 +33,9 @@ export default function Card({ children, element, dataColumns }) {
               <Disclosure.Panel className="w-full pt-2">
                 <div className="grid grid-cols-3 w-[95%]">
                   {panelCols.map((col) => (
-                    <div key={col.name} className="flex justify-start">
-                      <span className="text-sky-800 px-2 font-bold">{col.label}:</span>
-                      <span className="text-zinc-800">{element[col.name]}</span>
+                    <div key={col.name} className="flex h-6 justify-start">
+                      <span className="text-left text-sky-800 px-2 font-bold">{col.label}:</span>
+                      <span className="text-left text-zinc-800 whitespace-nowrap overflow-x-scroll">{element[col.name]}</span>
                     </div>
                   ))}
                   <div className="flex justify-start">

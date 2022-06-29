@@ -1,9 +1,10 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import FormInput from "./FormInput";
+import { useRouter } from 'next/router';
 
-export default function FormModal({ children, buttonStyle, element, dataColumns, purpose, handleSubmit }) {
+export default function ResponseModal({ purpose, buttonStyle, pText, element, handleAuto, setContext, routing }) {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   function closeModal() {
     setIsOpen(false)
@@ -11,6 +12,25 @@ export default function FormModal({ children, buttonStyle, element, dataColumns,
 
   function openModal() {
     setIsOpen(true)
+  }
+
+  function handleYes(e) {
+    e.preventDefault();
+    setContext(element);
+    handleAuto(element);
+    closeModal();
+    if (routing) {
+      router.push(routing);
+    }
+  }
+
+  function handleNo(e) {
+    e.preventDefault();
+    setContext(element);
+    closeModal();
+    if (routing) {
+      router.push(routing);
+    }
   }
 
   return (
@@ -22,7 +42,6 @@ export default function FormModal({ children, buttonStyle, element, dataColumns,
       >
         {purpose}
       </button>
-
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child
@@ -55,48 +74,31 @@ export default function FormModal({ children, buttonStyle, element, dataColumns,
                   >
                     {purpose}
                   </Dialog.Title>
-                  <div className="mt-2">
-                    <form
-                      onSubmit={handleSubmit}
+                  <p>
+                    {pText}
+                  </p>
+                  <div className="mt-4 flex flex-row justify-between">
+                    <button
+                      type="button"
+                      className="mx-2 rounded-md bg-amber-200 px-4 py-2 text-amber-900 hover:bg-amber-100"
+                      onClick={handleYes}
                     >
-                      <div className="grid grid-cols-2 text-sm text-gray-500">
-                        {dataColumns.map((col) => (
-                          <FormInput
-                            key={col.name}
-                            name={col.name}
-                            type={col.type}
-                            label={col.label}
-                            value={element ? (
-                              element[col.name] !== null || undefined ? (
-                                element[col.name]
-                              ) : (
-                                '' 
-                              )
-                            ) : (
-                              ''
-                            )}
-                            isRequired={col.required}
-                          />
-                        ))}
-                      </div>
-                      <div className="mt-4 flex flex-row justify-between">
-                        <button
-                          type="submit"
-                          className="mx-2 rounded-md bg-amber-200 px-4 py-2 text-amber-900 hover:bg-amber-100"
-                          onClick={closeModal}
-                        >
-                          Submit
-                        </button>
-                        {children}
-                        <button
-                          type="button"
-                          className="mx-2 rounded-md bg-amber-200 px-4 py-2 text-amber-900 hover:bg-amber-100"
-                          onClick={closeModal}
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </form>
+                      Yes
+                    </button>
+                    <button
+                      type="button"
+                      className="mx-2 rounded-md bg-amber-200 px-4 py-2 text-amber-900 hover:bg-amber-100"
+                      onClick={handleNo}
+                    >
+                      No
+                    </button>
+                    <button
+                      type="button"
+                      className="mx-2 rounded-md bg-amber-200 px-4 py-2 text-amber-900 hover:bg-amber-100"
+                      onClick={closeModal}
+                    >
+                      Cancel
+                    </button>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

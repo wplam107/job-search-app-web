@@ -1,6 +1,7 @@
 export const interviewCols = [
-  { name: "company", label: "Company", type: "text", required: true, noEdit: true },
-  { name: "job_title", label: "Job Title", type: "text", required: true, noEdit: true },
+  { name: "company", label: "Company", type: "text", isTitle: true, noEdit: true, required: true },
+  { name: "job_title", label: "Job Title", type: "text", isTitle: true, noEdit: true, required: true },
+  { name: "applied_at", label: "Date Applied", type: "date", isTitle: true, noEdit: true, required: true },
   { name: "interview_type", label: "Interview Type", type: "text", required: false },
   { name: "interview_at", label: "Interview Date", type: "date", required: true },
   { name: "response", label: "Company Response", type: "text", required: false },

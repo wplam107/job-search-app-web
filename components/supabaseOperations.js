@@ -1,3 +1,5 @@
+import { saveAs } from 'file-saver';
+
 export const addJob = async (supabase, values) => {
   const { data, error } = await supabase
     .from("jobs")
@@ -27,6 +29,22 @@ export const deleteJob = async (supabase, jobId) => {
   }
 };
 
+export async function addInterview(supabase, values, jobId) {
+  const newValues = {
+    job_id: jobId,
+    interview_type: values["interview_type"],
+    interview_at: values["interview_at"],
+    responded_at: values["responded_at"],
+    response: values["response"]
+  }
+  const { data, error } = await supabase
+    .from("interviews")
+    .insert(values);
+  if (error) {
+    alert("Error: " + error["message"]);
+  }
+};
+
 export const updateInterview = async (supabase, values, interviewId) => {
   const newValues = {
     interview_type: values["interview_type"],
@@ -50,5 +68,21 @@ export const deleteInterview = async (supabase, interviewId) => {
     .match({ id: interviewId});
   if (error) {
     alert("Error: " + error["message"]);
+  }
+};
+
+export async function downloadTable(supabase, table) {
+  const { data, error } = await supabase
+    .from(table)
+    .select("*")
+    .order('applied_at', { ascending: false })
+    .csv();
+
+  if (error) {
+    alert("Error: " + error["message"]);
+  } else {
+    const fileName = `${table}.csv`;
+    const fileToSave = new Blob([data], {type: "text/plain;charset=utf-8"});
+    saveAs(fileToSave, fileName);
   }
 };

@@ -1,19 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { supabase } from "./api/supabaseClient";
 import Layout from "../components/layout";
 import Card from "../components/Card";
 import { jobCols } from "../components/dataColumns";
 import FormModal from "../components/FormModal";
-import { addJob, updateJob, deleteJob } from "../components/supabaseOperations";
-import { saveAs } from 'file-saver';
+import { addJob, updateJob, deleteJob, downloadTable } from "../components/supabaseOperations";
 import parseFormValues from "../utils/parseFormValues";
 import { CogIcon } from "@heroicons/react/solid";
 import SideBar from "../components/SideBar";
 import FilterInput from "../components/FilterInput";
+import ResponseModal from "../components/ResponseModal";
+import { ResponseContext } from "../context/contexts";
 import nowToYYYYMMDD from "../utils/nowToYYYYMMDD";
 
 export default function Jobs({ user }) {
-  // const now = nowToYYYYMMDD();
   const initialState = {
     company: '',
     jobTitle: '',
@@ -39,13 +39,21 @@ export default function Jobs({ user }) {
     { value: thruDate, name: "thruDate", label: "Applied Through", type: "date", setter: setThruDate },
   ];
 
+  const [responseContext, setResponseContext] = useContext(ResponseContext);
+
   useEffect(() => {
     retrieveJobs();
   }, [company, jobTitle, sitePosted, bothDates]);
 
   useEffect(() => {
     if (fromDate !== '' && thruDate !== '') {
-      setBothDates(true);
+      const first = new Date(fromDate);
+      const second = new Date(thruDate);
+      if (first <= second) {
+        setBothDates(true);
+      } else {
+        setBothDates(false);
+      }
     } else {
       setBothDates(false);
     }
@@ -62,9 +70,9 @@ export default function Jobs({ user }) {
     setJobsLoading(true);
 
     let query = supabase.from('jobs').select('*');
-    if (company !== '') { query = query.like("company", `%${company}%`); }
-    if (jobTitle !== '') { query = query.like("job_title", `%${jobTitle}%`); }
-    if (sitePosted !== '') { query = query.like("site_posted", `%${sitePosted}%`); }
+    if (company !== '') { query = query.ilike("company", `%${company}%`); }
+    if (jobTitle !== '') { query = query.ilike("job_title", `%${jobTitle}%`); }
+    if (sitePosted !== '') { query = query.ilike("site_posted", `%${sitePosted}%`); }
     if (bothDates) { query = query.gte("applied_at", fromDate).lte("applied_at", thruDate); }
     query = query.order('applied_at', { ascending: false }).order('company', { ascending: true });
 
@@ -98,14 +106,7 @@ export default function Jobs({ user }) {
 
   async function handleDownload(e) {
     e.preventDefault();
-    const { data, error } = await supabase.from("jobs").select("*").csv();
-    if (error) {
-      alert("Error: " + error["message"]);
-    } else {
-      const fileName = "jobs.csv";
-      const fileToSave = new Blob([data], {type: "text/plain;charset=utf-8"});
-      saveAs(fileToSave, fileName);
-    }
+    downloadTable(supabase, 'jobs');
   }
 
   function handleResetFilters(e) {
@@ -115,13 +116,29 @@ export default function Jobs({ user }) {
     });
   }
 
+  async function handleAuto(jobId) {
+    const values = { response: "Interview", responded_at: nowToYYYYMMDD() };
+    // await updateJob(supabase, values, jobId);
+    console.log("Update for: ", jobId);
+    console.log("Values: ", values);
+    
+  }
+
   return (
-    <div className="my-4 w-full grid grid-cols-5">
+    <div className="my-4 w-full grid grid-cols-4">
       <div className="col-span-1 flex flex-col items-center">
         <SideBar
+          ModalComponent={
+            <FormModal
+              buttonStyle="rounded-md bg-sky-600 mx-2 px-2 text-white hover:bg-sky-400"
+              dataColumns={jobCols}
+              purpose="Add New Jobs"
+              handleSubmit={(e) => handleSubmit(e, true, '')}
+            />
+          }
           handleDownload={handleDownload}
-          handleSubmit={(e) => handleSubmit(e, true, '')}
           dataColumns={jobCols}
+          purpose="Job"
         >
           {filters.map((filter) => (
             <FilterInput
@@ -143,11 +160,11 @@ export default function Jobs({ user }) {
           </div>
         </SideBar>
       </div>
-      <div className="col-span-4 flex flex-col items-center">
+      <div className="col-span-3 w-full flex flex-col items-center">
         <h1 className="text-4xl mb-4 text-amber-600">
           Add/Edit Jobs
         </h1>
-        <div>
+        <div className="w-full">
           {jobsLoading ? (
             <div className="flex justify-center items-center">
               <CogIcon className="animate-spin h-16 w-16" />
@@ -164,7 +181,7 @@ export default function Jobs({ user }) {
               dataColumns={jobCols}
             >
               <FormModal
-                buttonStyle="rounded-md bg-sky-900 px-2 text-white hover:bg-opacity-50"
+                buttonStyle="rounded-md bg-sky-900 px-2 mx-2 text-white hover:bg-opacity-50"
                 element={element}
                 dataColumns={jobCols}
                 purpose="Edit Job"
@@ -172,11 +189,20 @@ export default function Jobs({ user }) {
               >
                 <button
                   onClick={(e) => handleDelete(e, element)}
-                  className="inline-flex mx-2 justify-center rounded-md bg-purple-200 px-4 py-2 text-sm font-medium text-purple-900 hover:bg-purple-100"
+                  className="mx-2 rounded-md bg-purple-200 px-4 py-2 text-purple-900 hover:bg-purple-100"
                 >
                   Delete
                 </button>
               </FormModal>
+              <ResponseModal
+                buttonStyle="rounded-md bg-sky-900 px-2 mx-2 text-white hover:bg-opacity-50"
+                purpose="Add Interview"
+                pText={"Automatically create an interview for the job (date set to today)?"}
+                element={element}
+                handleAuto={handleAuto}
+                setContext={setResponseContext}
+                routing="/interviews"
+              />
             </Card>
           ))}
         </div>
