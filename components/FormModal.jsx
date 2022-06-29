@@ -62,10 +62,19 @@ export default function FormModal({ children, buttonStyle, element, dataColumns,
                       <div className="grid grid-cols-2 text-sm text-gray-500">
                         {dataColumns.map((col) => (
                           <FormInput
+                            key={col.name}
                             name={col.name}
                             type={col.type}
                             label={col.label}
-                            value={element ? element[col.name] : ''}
+                            value={element ? (
+                              element[col.name] !== null || undefined ? (
+                                element[col.name]
+                              ) : (
+                                '' 
+                              )
+                            ) : (
+                              ''
+                            )}
                             isRequired={col.required}
                           />
                         ))}
@@ -74,6 +83,7 @@ export default function FormModal({ children, buttonStyle, element, dataColumns,
                         <button
                           type="submit"
                           className="inline-flex mx-2 justify-center rounded-md bg-amber-200 px-4 py-2 text-sm font-medium text-amber-900 hover:bg-amber-100"
+                          onClick={closeModal}
                         >
                           Submit
                         </button>

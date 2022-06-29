@@ -7,15 +7,49 @@ import FormModal from "../components/FormModal";
 import { addJob, updateJob, deleteJob } from "../components/supabaseOperations";
 import { saveAs } from 'file-saver';
 import parseFormValues from "../utils/parseFormValues";
+import { CogIcon } from "@heroicons/react/solid";
+import SideBar from "../components/SideBar";
+import FilterInput from "../components/FilterInput";
+import nowToYYYYMMDD from "../utils/nowToYYYYMMDD";
 
 export default function Jobs({ user }) {
+  // const now = nowToYYYYMMDD();
+  const initialState = {
+    company: '',
+    jobTitle: '',
+    sitePosted: '',
+    fromDate: '',
+    thruDate: '',
+  }
   const [jobs, setJobs] = useState([]);
   const [jobsLoading, setJobsLoading] = useState(false);
+  const [company, setCompany] = useState(initialState.company);
+  const [jobTitle, setJobTitle] = useState(initialState.jobTitle);
+  const [fromDate, setFromDate] = useState(initialState.fromDate);
+  const [thruDate, setThruDate] = useState(initialState.thruDate);
+  const [sitePosted, setSitePosted] = useState(initialState.sitePosted);
+  const [bothDates, setBothDates] = useState(false);
+  
   const userId = user.id;
+  const filters = [
+    { value: company, name: "company", label: "Company", type: "text", setter: setCompany },
+    { value: jobTitle, name: "jobTitle", label: "Job Title", type: "text", setter: setJobTitle },
+    { value: sitePosted, name: "sitePosted", label: "Site Posted", type: "text", setter: setSitePosted },
+    { value: fromDate, name: "fromDate", label: "Applied From", type: "date", setter: setFromDate },
+    { value: thruDate, name: "thruDate", label: "Applied Through", type: "date", setter: setThruDate },
+  ];
 
   useEffect(() => {
     retrieveJobs();
-  }, []);
+  }, [company, jobTitle, sitePosted, bothDates]);
+
+  useEffect(() => {
+    if (fromDate !== '' && thruDate !== '') {
+      setBothDates(true);
+    } else {
+      setBothDates(false);
+    }
+  }, [fromDate, thruDate]);
 
   const jobsSubscription = supabase
     .from('jobs')
@@ -28,6 +62,10 @@ export default function Jobs({ user }) {
     setJobsLoading(true);
 
     let query = supabase.from('jobs').select('*');
+    if (company !== '') { query = query.like("company", `%${company}%`); }
+    if (jobTitle !== '') { query = query.like("job_title", `%${jobTitle}%`); }
+    if (sitePosted !== '') { query = query.like("site_posted", `%${sitePosted}%`); }
+    if (bothDates) { query = query.gte("applied_at", fromDate).lte("applied_at", thruDate); }
     query = query.order('applied_at', { ascending: false }).order('company', { ascending: true });
 
     const { data, error } = await query;
@@ -70,42 +108,55 @@ export default function Jobs({ user }) {
     }
   }
 
-  if (jobsLoading) {
-    return (
-      <div>
-        <h1>Jobs Loading...</h1>
-      </div>
-    );
+  function handleResetFilters(e) {
+    e.preventDefault();
+    filters.map((filter) => {
+      filter.setter(initialState[filter.name]);
+    });
   }
 
   return (
-    <div className="my-4 w-full grid grid-cols-4">
+    <div className="my-4 w-full grid grid-cols-5">
       <div className="col-span-1 flex flex-col items-center">
-        <div className="sticky top-[120px] flex flex-col items-center">
-          <h1 className="text-2xl mb-4 text-amber-600">
-            Operations
-          </h1>
-          <button
-            onClick={handleDownload}
-            className="rounded-md bg-purple-600 mx-2 px-2 text-white hover:bg-purple-400"
-          >
-            Download Jobs
-          </button>
-          <div className="mt-4">
-            <FormModal
-              buttonStyle="rounded-md bg-sky-600 mx-2 px-2 text-white hover:bg-sky-400"
-              dataColumns={jobCols}
-              purpose="Add New Job"
-              handleSubmit={(e) => handleSubmit(e, true, '')}
+        <SideBar
+          handleDownload={handleDownload}
+          handleSubmit={(e) => handleSubmit(e, true, '')}
+          dataColumns={jobCols}
+        >
+          {filters.map((filter) => (
+            <FilterInput
+              key={filter.name}
+              name={filter.name}
+              type={filter.type}
+              value={filter.value}
+              label={filter.label}
+              setter={filter.setter}
             />
+          ))}
+          <div className="my-2">
+            <button
+              className="inline-flex mx-2 justify-center rounded-md bg-red-300 px-4 py-2 text-red-900 hover:bg-red-200"
+              onClick={handleResetFilters}
+            >
+              Reset Filters
+            </button>
           </div>
-        </div>
+        </SideBar>
       </div>
-      <div className="col-span-3 flex flex-col items-center">
+      <div className="col-span-4 flex flex-col items-center">
         <h1 className="text-4xl mb-4 text-amber-600">
           Add/Edit Jobs
         </h1>
         <div>
+          {jobsLoading ? (
+            <div className="flex justify-center items-center">
+              <CogIcon className="animate-spin h-16 w-16" />
+            </div>
+          ) : (
+            <div className="flex justify-center items-center">
+              <div className="h-16 w-16" />
+            </div>
+          )}
           {jobs.map((element) => (
             <Card
               key={element['id']}

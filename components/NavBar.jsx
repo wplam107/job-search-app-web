@@ -1,4 +1,4 @@
-import ActiveLink from './activeLink';
+import ActiveLink from './ActiveLink';
 
 export default function NavBar({ authState }) {
   return (
