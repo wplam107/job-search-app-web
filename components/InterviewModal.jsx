@@ -1,11 +1,12 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, useContext } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { supabase } from "../pages/api/supabaseClient";
+import { ResponseContext } from "../context/contexts";
 import FormInput from "./FormInput";
 import ListBoxInputs from "./ListBoxInputs";
 
-export default function InterviewModal({ children, buttonStyle, element, dataColumns, handleSubmit, setter, defaultOpen }) {
-  const [isOpen, setIsOpen] = useState(defaultOpen ? true : false);
+export default function InterviewModal({ children, buttonStyle, element, dataColumns, handleSubmit, setter }) {
+  const [formOpen, setFormOpen] = useState(false);
   const [companies, setCompanies] = useState([]);
   const [jobTitles, setJobTitles] = useState([]);
   const [appliedDates, setAppliedDates] = useState([]);
@@ -13,8 +14,18 @@ export default function InterviewModal({ children, buttonStyle, element, dataCol
   const [selectedJobTitle, setSelectedJobTitle] = useState('');
   const [selectedAppliedDate, setSelectedAppliedDate] = useState('');
 
+  const [responseContext, setResponseContext] = useContext(ResponseContext);
+
   useEffect(() => {
     retrieveCompanies();
+    if (responseContext !== '') {
+      console.log(responseContext);
+      setFormOpen(true);
+      setSelectedCompany({ company: responseContext['company'] });
+      setSelectedJobTitle({ job_title: responseContext['job_title'] });
+      setSelectedAppliedDate({ applied_at: responseContext['applied_at'], job_id: responseContext['id'] });
+      setResponseContext('');
+    }
   }, []);
 
   useEffect(() => {
@@ -61,11 +72,14 @@ export default function InterviewModal({ children, buttonStyle, element, dataCol
   }, [selectedCompany, selectedJobTitle]);
 
   function closeModal() {
-    setIsOpen(false)
+    setSelectedCompany('');
+    setSelectedJobTitle('');
+    setSelectedAppliedDate('');
+    setFormOpen(false);
   }
 
   function openModal() {
-    setIsOpen(true)
+    setFormOpen(true);
   }
 
   return (
@@ -78,7 +92,7 @@ export default function InterviewModal({ children, buttonStyle, element, dataCol
         Add New Interview
       </button>
 
-      <Transition appear show={isOpen} as={Fragment}>
+      <Transition appear show={formOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child
             as={Fragment}

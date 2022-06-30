@@ -5,7 +5,6 @@ import Card from '../components/Card';
 import { interviewCols } from '../components/dataColumns';
 import { addInterview, deleteInterview, downloadTable, updateInterview } from '../components/supabaseOperations';
 import parseFormValues from '../utils/parseFormValues';
-import { ResponseContext } from '../context/contexts';
 import SideBar from '../components/SideBar';
 import FilterInput from '../components/FilterInput';
 import { CogIcon } from '@heroicons/react/solid';
@@ -36,9 +35,7 @@ export default function Interviews({ user }) {
     { value: thruDate, name: "thruDate", label: "Applied Through", type: "date", setter: setThruDate },
   ];
 
-  const [responseContext, setResponseContext] = useContext(ResponseContext);
-
-  const jobsSubscription = supabase
+  const interviewsSubscription = supabase
     .from('interviews')
     .on('*', payload => {
       retrieveInterviews();
@@ -47,10 +44,6 @@ export default function Interviews({ user }) {
 
   useEffect(() => {
     retrieveInterviews();
-    if (responseContext !== '') {
-      setFormJobId(responseContext['id']);
-      setResponseContext('');
-    }
   }, []);
 
   useEffect(() => {
@@ -84,6 +77,7 @@ export default function Interviews({ user }) {
     if (isNewForm) {
       values['user_id'] = userId;
       values['job_id'] = formJobId;
+      console.log(values);
       await addInterview(supabase, values);
     } else {
       // await updateInterview(supabase, values, interviewId);
