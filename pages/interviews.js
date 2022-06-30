@@ -10,6 +10,7 @@ import SideBar from '../components/SideBar';
 import FilterInput from '../components/FilterInput';
 import { CogIcon } from '@heroicons/react/solid';
 import InterviewModal from '../components/InterviewModal';
+import FormModal from '../components/FormModal';
 
 export default function Interviews({ user }) {
   const initialState = {
@@ -36,6 +37,13 @@ export default function Interviews({ user }) {
   ];
 
   const [responseContext, setResponseContext] = useContext(ResponseContext);
+
+  const jobsSubscription = supabase
+    .from('interviews')
+    .on('*', payload => {
+      retrieveInterviews();
+    })
+    .subscribe();
 
   useEffect(() => {
     retrieveInterviews();
@@ -74,9 +82,9 @@ export default function Interviews({ user }) {
     e.preventDefault();
     const values = parseFormValues(e.target);
     if (isNewForm) {
-      await addInterview(supabase, values, formJobId);
-      console.log("Add");
-      console.log(formJobId);
+      values['user_id'] = userId;
+      values['job_id'] = formJobId;
+      await addInterview(supabase, values);
     } else {
       // await updateInterview(supabase, values, interviewId);
       console.log("Update");
@@ -167,7 +175,7 @@ export default function Interviews({ user }) {
                 buttonStyle="rounded-md bg-sky-900 px-2 mx-2 text-white hover:bg-opacity-50"
                 element={element}
                 dataColumns={interviewCols}
-                purpose="Edit Job"
+                purpose="Edit Interview"
                 handleSubmit={(e) => handleSubmit(e, false, element['id'])}
               >
                 <button

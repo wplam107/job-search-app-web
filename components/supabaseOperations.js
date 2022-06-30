@@ -29,17 +29,10 @@ export const deleteJob = async (supabase, jobId) => {
   }
 };
 
-export async function addInterview(supabase, values, jobId) {
-  const newValues = {
-    job_id: jobId,
-    interview_type: values["interview_type"],
-    interview_at: values["interview_at"],
-    responded_at: values["responded_at"],
-    response: values["response"]
-  }
+export async function addInterview(supabase, values) {
   const { data, error } = await supabase
     .from("interviews")
-    .insert(values);
+    .insert(values, { returning: 'minimal' });
   if (error) {
     alert("Error: " + error["message"]);
   }
