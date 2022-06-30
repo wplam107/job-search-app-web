@@ -17,7 +17,7 @@ export default function ResponseModal({ purpose, buttonStyle, pText, element, ha
   function handleYes(e) {
     e.preventDefault();
     setContext(element);
-    handleAuto(element);
+    handleAuto(element.id);
     closeModal();
     if (routing) {
       router.push(routing);

@@ -19,7 +19,6 @@ export default function InterviewModal({ children, buttonStyle, element, dataCol
   useEffect(() => {
     retrieveCompanies();
     if (responseContext !== '') {
-      console.log(responseContext);
       setFormOpen(true);
       setSelectedCompany({ company: responseContext['company'] });
       setSelectedJobTitle({ job_title: responseContext['job_title'] });

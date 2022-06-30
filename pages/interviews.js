@@ -44,7 +44,7 @@ export default function Interviews({ user }) {
 
   useEffect(() => {
     retrieveInterviews();
-  }, []);
+  }, [company, jobTitle, fromDate, thruDate]);
 
   useEffect(() => {
     if (fromDate !== '' && thruDate !== '') {
@@ -62,7 +62,13 @@ export default function Interviews({ user }) {
 
   const retrieveInterviews = async () => {
     setInterviewsLoading(true);
-    const { error, data } = await supabase.rpc("user_interviews");
+
+    let query = supabase.rpc("user_interviews");
+    if (company !== '') { query = query.ilike("company", `%${company}%`); }
+    if (jobTitle !== '') { query = query.ilike("job_title", `%${jobTitle}%`); }
+    if (bothDates) { query = query.gte("applied_at", fromDate).lte("applied_at", thruDate); }
+    query = query.order('applied_at', { ascending: false }).order('company', { ascending: true });
+    const { error, data } = await query;
     if (error) {
       alert(`Error: ${error["message"]}`);
     } else {
@@ -77,11 +83,9 @@ export default function Interviews({ user }) {
     if (isNewForm) {
       values['user_id'] = userId;
       values['job_id'] = formJobId;
-      console.log(values);
       await addInterview(supabase, values);
     } else {
-      // await updateInterview(supabase, values, interviewId);
-      console.log("Update");
+      await updateInterview(supabase, values, interviewId);
     }
   };
 
@@ -90,8 +94,7 @@ export default function Interviews({ user }) {
 
     const result = confirm(`Warning: Delete Interview?`);
     if (result === true) {
-      // await deleteInterview(supabase, element["id"]);
-      console.log("Delete");
+      await deleteInterview(supabase, element["id"]);
       retrieveInterviews();
     }
   };
@@ -179,14 +182,6 @@ export default function Interviews({ user }) {
                   Delete
                 </button>
               </FormModal>
-              {/* <ResponseModal
-                buttonStyle="rounded-md bg-sky-900 px-2 mx-2 text-white hover:bg-opacity-50"
-                purpose="Add Interview"
-                pText={"Automatically create an interview for the job (date set to today)?"}
-                element={element}
-                handleAuto={handleAuto}
-                setContext={setResponseContext}
-              /> */}
             </Card>
           ))}
         </div>

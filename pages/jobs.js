@@ -118,9 +118,7 @@ export default function Jobs({ user }) {
 
   async function handleAuto(jobId) {
     const values = { response: "Interview", responded_at: nowToYYYYMMDD() };
-    // await updateJob(supabase, values, jobId);
-    console.log("Update for: ", jobId);
-    console.log("Values: ", values);
+    await updateJob(supabase, values, jobId);
     
   }
 
