@@ -1,15 +1,34 @@
 import { useEffect, useState } from 'react';
 import Layout from '../components/layout';
 import { supabase } from './api/supabaseClient';
+import Calender from '../components/Calender';
 
 export default function Index() {
+  const today = new Date();
+  const yearAgo = new Date().setFullYear(today.getFullYear() - 1);
+
   const [totalAppJobs, setTotalAppJobs] = useState(0);
   const [totalAppUsers, setTotalAppUsers] = useState(0);
+  const [dailyJobCounts, setDailyJobCounts] = useState([]);
 
   useEffect(() => {
     getTotalAppJobs();
     getTotalAppUsers();
+    getDailyJobCounts();
   }, []);
+
+  async function getDailyJobCounts() {
+    const { data, error } = await supabase.rpc('total_daily_job_counts');
+    if (error) {
+      alert(`Error: ${error["message"]}`);
+    }
+    const processedData = data.map((row) => {
+      return (
+        { date: `${row.applied_at}T00:00:00`, count: row.job_count } 
+      )
+    })
+    setDailyJobCounts(processedData);
+  }
 
   const getTotalAppJobs = async () => {
     const { data, error } = await supabase.rpc("total_app_jobs");
@@ -40,6 +59,17 @@ export default function Index() {
           Total Users on App:<span className="text-amber-400">{` ${totalAppUsers}`}</span>
         </li>
       </ul>
+      <div className="my-4 flex flex-col w-full items-center">
+        <h1 className="text-green-300 font-bold">
+        Dates of Jobs Applied to from All Users:
+        </h1>
+        <Calender
+          data={dailyJobCounts}
+          startDate={yearAgo}
+          endDate={today}
+          purpose="job"
+        />
+      </div>
     </div>
   );
 };
