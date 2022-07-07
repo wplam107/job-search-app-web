@@ -8,7 +8,7 @@ function ActiveLink({ children, href, name }) {
   useEffect(() => {
     if (router.asPath === href) {
       setClassName('text-orange-400');
-    } else if (name === 'home' && router.asPath === `/#${tokenName}`) {
+    } else if (name === 'home' && router.asPath === '/#') {
       setClassName('text-orange-400');
     } else {
       setClassName('hover:text-orange-400');
