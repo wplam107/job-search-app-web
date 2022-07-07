@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { supabase } from '../pages/api/supabaseClient'
 
 function ActiveLink({ children, href, name }) {
   const [className, setClassName] = useState('hover:text-orange-400');
