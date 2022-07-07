@@ -6,6 +6,8 @@ function ActiveLink({ children, href, name }) {
   const router = useRouter();
 
   useEffect(() => {
+    console.log(router.asPath);
+    console.log(href);
     if (router.asPath === href) {
       setClassName('text-orange-400');
     } else if (name === 'home' && router.asPath === '/#') {
