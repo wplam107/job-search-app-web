@@ -8,9 +8,9 @@ function ActiveLink({ children, href, name }) {
   useEffect(() => {
     let token = '';
     if (localStorage.getItem("supabase.auth.token") !== null || localStorage.getItem("supabase.auth.token") !== undefined) {
-      const cookie = JSON.parse(localStorage.getItem("supabase.auth.token"));
-      const currentSession = cookie["currentSession"];
       try {
+        const cookie = JSON.parse(localStorage.getItem("supabase.auth.token"));
+        const currentSession = cookie["currentSession"];
         token = currentSession["access_token"];
       } catch {
         token = '';
