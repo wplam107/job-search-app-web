@@ -66,9 +66,9 @@ export default function SankeyComponent({ data }) {
         nodePadding={30}
         nodeWidth={10}
         onValueMouseOver={(d, e) => handleMouseOver(d)}
-        onValueMouseOut={d => setTimeout(() => setHovered(false), 500)}
+        onValueMouseOut={d => setHovered(false)}
         onLinkMouseOver={(d, e) => handleMouseOver(d)}
-        onLinkMouseOut={d => setTimeout(() => setHovered(false), 500)}
+        onLinkMouseOut={d => setHovered(false)}
       />
     </div>
   );
