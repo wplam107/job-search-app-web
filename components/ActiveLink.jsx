@@ -7,10 +7,6 @@ function ActiveLink({ children, href, name }) {
   const router = useRouter();
 
   useEffect(() => {
-    const cookie = localStorage.getItem("supabase.auth.token");
-    const tokenName = cookie["currentSession"]["access_token"];
-    console.log(tokenName);
-
     if (router.asPath === href) {
       setClassName('text-orange-400');
     } else if (name === 'home' && router.asPath === `/#${tokenName}`) {
