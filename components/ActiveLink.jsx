@@ -1,16 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { supabase } from '../pages/api/supabaseClient'
 
 function ActiveLink({ children, href, name }) {
   const [className, setClassName] = useState('hover:text-orange-400');
   const router = useRouter();
 
   useEffect(() => {
-    console.log(router.asPath);
-    console.log(href);
+    const cookie = localStorage.getItem("supabase.auth.token");
+    const tokenName = cookie["currentSession"]["access_token"];
+    console.log(tokenName);
+
     if (router.asPath === href) {
       setClassName('text-orange-400');
-    } else if (name === 'home' && router.asPath === '/#') {
+    } else if (name === 'home' && router.asPath === `/#${tokenName}`) {
       setClassName('text-orange-400');
     } else {
       setClassName('hover:text-orange-400');
