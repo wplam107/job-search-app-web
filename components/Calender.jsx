@@ -3,6 +3,7 @@ import ReactCalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
 import getMaxCount from '../utils/getMaxCount';
 import ReactTooltip from 'react-tooltip';
+import { CogIcon } from '@heroicons/react/solid';
 
 export default function Calender({ data, startDate, endDate, purpose }) {
   const [calenderData, setCalenderData] = useState([]);
@@ -20,6 +21,14 @@ export default function Calender({ data, startDate, endDate, purpose }) {
       setCalenderData(data);
     }
   }, [data])
+
+  if (calenderData.length === 0) {
+    return (
+      <div className="flex justify-center items-center">
+        <CogIcon className="animate-spin h-16 w-16" />
+      </div>
+    );
+  }
 
   return (
     <div className="my-2 p-2 w-[800px] border border-zinc-600">

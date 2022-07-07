@@ -37,7 +37,7 @@ $$;
 -- Function to retrieve data for sankey diagram
 create or replace function sankey_data()
 returns table (
-  job_id bigint,
+  -- job_id bigint,
   stage bigint,
   company_response text
 )
@@ -47,7 +47,7 @@ as $$
 begin
   return query
     select
-      rec.job_id,
+      -- rec.job_id,
       rec.stage,
       rec.response as company_response
     from (

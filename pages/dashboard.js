@@ -6,6 +6,7 @@ import getLatestDate from '../utils/getLatestDate';
 import DashSidebar from '../components/DashSidebar';
 import { DashboardContext } from '../context/contexts';
 import parseSankeyData from '../utils/parseSankeyData';
+import SankeyComponent from '../components/SankeyComponent';
 
 export default function Dashboard({ user }) {
   const today = new Date();
@@ -83,7 +84,7 @@ export default function Dashboard({ user }) {
             </h1>
             {isJobDashboard ? (
               <div className="my-4 flex flex-col w-full items-center">
-                <h1 className="text-green-300 font-bold">
+                <h1 className="text-amber-300 font-bold">
                 Dates of Jobs Applied:
                 </h1>
                 <Calender
@@ -106,8 +107,11 @@ export default function Dashboard({ user }) {
                 />
               </div>
             )}
-            <div className="my-4">
-              Line Plot
+            <div className="my-4 flex flex-col w-full items-center">
+              <h1 className="text-amber-300 font-bold">
+                Job Application Responses:
+              </h1>
+              <SankeyComponent data={sankeyData} />
             </div>
           </div>
         </div>

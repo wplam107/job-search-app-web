@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import Layout from '../components/layout';
 import { supabase } from './api/supabaseClient';
 import Calender from '../components/Calender';
+import parseSankeyData from '../utils/parseSankeyData';
+import SankeyComponent from '../components/SankeyComponent';
 
 export default function Index() {
   const today = new Date();
@@ -10,12 +12,23 @@ export default function Index() {
   const [totalAppJobs, setTotalAppJobs] = useState(0);
   const [totalAppUsers, setTotalAppUsers] = useState(0);
   const [dailyJobCounts, setDailyJobCounts] = useState([]);
+  const [sankeyData, setSankeyData] = useState([]);
 
   useEffect(() => {
     getTotalAppJobs();
     getTotalAppUsers();
     getDailyJobCounts();
+    retrieveSankeyData();
   }, []);
+
+  async function retrieveSankeyData() {
+    const { data, error } = await supabase.rpc('all_sankey_data');
+    if (error) {
+      alert(`Error: ${error["message"]}`);
+    }
+    const processedData = parseSankeyData(data);
+    setSankeyData(processedData);
+  }
 
   async function getDailyJobCounts() {
     const { data, error } = await supabase.rpc('total_daily_job_counts');
@@ -60,7 +73,7 @@ export default function Index() {
         </li>
       </ul>
       <div className="my-4 flex flex-col w-full items-center">
-        <h1 className="text-green-300 font-bold">
+        <h1 className="text-amber-300 font-bold">
         Dates of Jobs Applied to from All Users:
         </h1>
         <Calender
@@ -69,6 +82,12 @@ export default function Index() {
           endDate={today}
           purpose="job"
         />
+      </div>
+      <div className="my-4 flex flex-col w-full items-center">
+        <h1 className="text-amber-300 font-bold">
+          Job Application Responses from All Users:
+        </h1>
+        <SankeyComponent data={sankeyData} />
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ export default function parseSankeyData(data) {
   const stages = {};
   for (let i = 0; i <= max_stage; i++) {
     const node = {
-      name: i
+      name: i === 0 ? 'Job Applications' : `Interview #${i}s`
     };
     nodes.push(node);
     const source = i;
@@ -17,10 +17,16 @@ export default function parseSankeyData(data) {
   }
   nodes.push({ name: 'Rejection' });
   nodes.push({ name: 'Offer' });
+  nodes.push({ name: 'No Response' });
+  const dictionary = {
+    'Rejection': max_stage + 1,
+    'Offer': max_stage + 2,
+    'No Response': max_stage + 3
+  };
 
   for (let i = 0; i < data.length; i++) {
     const final_stage = data[i]['stage'];
-    const end_target = data[i]['company_response'];
+    const end_target = dictionary[data[i]['company_response']];
     for (let j = 0; j <= final_stage; j++) {
       if (j === final_stage) {
         if (!stages[j][end_target]) stages[j][end_target] = 1;
@@ -34,12 +40,11 @@ export default function parseSankeyData(data) {
   
   const links = [];
   for (let i = 0; i <= max_stage; i++) {
-    const source = i === 0 ? 'Job Applications' : `Interview #${i}s`;
     const keys = Object.keys(stages[i]);
     for (let j = 0; j < keys.length; j++) {
       const link = {
-        source: source,
-        target: keys[j],
+        source: i,
+        target: Number(keys[j]),
         value: stages[i][keys[j]]
       }
       links.push(link);
