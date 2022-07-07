@@ -27,7 +27,8 @@ begin
       i.response
     FROM interviews AS i
     JOIN jobs AS j
-      ON i.job_id = j.id;
+      ON i.job_id = j.id
+    ORDER BY i.interview_at DESC;
 end
 $$;
 

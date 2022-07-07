@@ -5,6 +5,7 @@ import { supabase } from './api/supabaseClient';
 import getLatestDate from '../utils/getLatestDate';
 import DashSidebar from '../components/DashSidebar';
 import { DashboardContext } from '../context/contexts';
+import parseSankeyData from '../utils/parseSankeyData';
 
 export default function Dashboard({ user }) {
   const today = new Date();
@@ -15,10 +16,12 @@ export default function Dashboard({ user }) {
   const [isJobDashboard, setIsJobDashboard] = useState(true);
   const [interviewStartDate, setInterviewStartDate] = useState(yearAgo);
   const [interviewEndDate, setInterviewEndDate] = useState(today);
+  const [sankeyData, setSankeyData] = useState([]);
   
   useEffect(() => {
     retrieveDailyJobCounts();
     retrieveDailyInterviewCounts();
+    retrieveSankeyData();
   }, []);
 
   async function retrieveDailyJobCounts() {
@@ -54,6 +57,15 @@ export default function Dashboard({ user }) {
       }
       setDailyInterviewCounts(processedData);
     }
+  }
+
+  async function retrieveSankeyData() {
+    const { data, error } = await supabase.rpc('sankey_data');
+    if (error) {
+      alert(`Error: ${error["message"]}`);
+    }
+    const processedData = parseSankeyData(data);
+    setSankeyData(processedData);
   }
 
   return (
